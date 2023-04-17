@@ -1,0 +1,39 @@
+# DDEV Apache Solr recipe file.
+#ddev-generated
+
+services:
+  solr:
+    # Name of container using standard ddev convention
+    container_name: ddev-${DDEV_SITENAME}-ibexa-solr
+    # The solr docker image is at https://hub.docker.com/_/solr/
+    # and code at https://github.com/docker-solr/docker-solr
+    # README: https://github.com/docker-solr/docker-solr/blob/master/README.md
+    # It's almost impossible to work with it if you don't read the docs there
+    image: solr:8
+    restart: "no"
+    # Solr is served from this port inside the container.
+    expose:
+      - 8983
+    # These labels ensure this service is discoverable by ddev.
+    labels:
+      com.ddev.site-name: ${DDEV_SITENAME}
+      com.ddev.approot: $DDEV_APPROOT
+    environment:
+      # This defines the host name the service should be accessible from. This
+      # will be sitename.ddev.site.
+      - VIRTUAL_HOST=$DDEV_HOSTNAME
+      # HTTP_EXPOSE exposes http traffic from the container port 8983
+      # to the host port 8983 vid ddev-router reverse proxy.
+      - HTTP_EXPOSE=8983:8983
+    volumes:
+      - solr:/var/solr
+      - ./solr:/solr-conf
+      - ".:/mnt/ddev_config"
+      - "./solr/docker-entrypoint-initdb.d:/docker-entrypoint-initdb.d"
+    external_links:
+      - "ddev-router:${DDEV_SITENAME}.${DDEV_TLD}"
+
+volumes:
+  # solr is a persistent Docker volume for solr data
+  solr:
+    name: "ddev-${DDEV_SITENAME}_solr"

@@ -1,0 +1,22 @@
+name: ibexa-solr
+
+pre_install_actions:
+
+project_files:
+- docker-compose.ibexa-solr.yaml
+- solr/docker-entrypoint-initdb.d/solr-configupdate.sh
+- solr/server/ibexa/template/
+
+global_files:
+
+# DDEV environment variables can be interpolated into these actions
+post_install_actions:
+  - |
+    #
+    chmod uga+w solr/server/ibexa/
+    chmod uga+w solr/server/ibexa/template
+  - |
+    #
+    chmod +x solr/docker-entrypoint-initdb.d/solr-configupdate.sh
+
+yaml_read_files:
