@@ -2,7 +2,17 @@
 #ddev-generated
 
 services:
+  initializer:
+    image: alpine
+    container_name: ddev-${DDEV_SITENAME}-ibexa-solr-initializer
+    restart: "no"
+    entrypoint: |
+      /bin/sh -c "chown 8983:8983 /solr"
+    volumes:
+      - ./data/solr:/solr
   solr:
+    depends_on:
+      - initializer
     # Name of container using standard ddev convention
     container_name: ddev-${DDEV_SITENAME}-ibexa-solr
     # The solr docker image is at https://hub.docker.com/_/solr/
@@ -26,6 +36,7 @@ services:
       # to the host port 8983 vid ddev-router reverse proxy.
       - HTTP_EXPOSE=8983:8983
     volumes:
+      - ./data/solr:/opt/solr/data
       - solr:/var/solr
       - ./solr:/solr-conf
       - ".:/mnt/ddev_config"
