@@ -4,7 +4,7 @@
 services:
   solr:
     # Name of container using standard ddev convention
-    container_name: ddev-${DDEV_SITENAME}-ibexa-solr
+    container_name: ddev-${DDEV_SITENAME}-solr
     # The solr docker image is at https://hub.docker.com/_/solr/
     # and code at https://github.com/docker-solr/docker-solr
     # README: https://github.com/docker-solr/docker-solr/blob/master/README.md
