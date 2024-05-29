@@ -18,4 +18,10 @@ if [ ! -d ${DESTINATION_IBEXA}/collection1/ ]; then
     /opt/solr/bin/solr stop -all
 fi
 
+# make new files writable from docker host
+chmod -R uga+w "${DESTINATION_IBEXA}/collection1/"
+chmod -R uga+w "${DESTINATION_IBEXA}/filestore/"
+chmod -R uga+w "${DESTINATION_IBEXA}/userfiles/"
+chmod uga+w "${DESTINATION_IBEXA}/solr.xml"
+
 /opt/solr/bin/solr -s ${DESTINATION_IBEXA} -f
